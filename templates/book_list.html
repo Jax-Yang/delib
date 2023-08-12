@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}📚 Books{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/splide-skyblue.min.css' %}">
+
+    <style>
+        .expendable-data-table .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding: 0.5em 1em;
+            margin-left: 2px;
+        }
+
+        .splide__slide img {
+            width: 100%;
+            height: auto;
+        }
+
+        #body > div.wrapper > div > div > div > div > div > div > div.card-body{
+            padding: 3rem;
+        }
+    </style>
+{% endblock %}
+
+{% block main_content %}
+<div class="content-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-default">
+                    <div class="card-header card-header-border-bottom d-flex justify-content-between">
+                        <h2>Books List</h2>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="expendable-data-table">
+                            <table id="expendable-data-table" class="table display nowrap" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center;">No.</th>
+                                        <th style="width: 50px;text-align: center;">封面</th>
+                                        <th style="text-align: center;">评分</th>
+                                        <th style="text-align: center;">评分人数</th>
+                                        <th style="text-wrap:normal;width: 250px;">书名</th>
+                                        <th style="text-align: center;">作者</th>
+                                        <th style="text-align: center;">篇幅</th>
+                                        <th style="text-align: center;">系列</th>
+                                        <th style="text-align: center;">首次出版</th>
+                                        <th style="text-align: center;">简介</th>
+                                        <th style="text-align: center;">Edit</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for book in books %}
+                                        <tr>
+                                            <td style="text-align: center;">{{ forloop.counter }}</td>
+                                            <td >
+                                                {% if book.bookedition_set.exists %}
+                                                    <section id="image-carousel" class="splide"
+                                                             aria-label="Beautiful Images">
+                                                        <div class="splide__track">
+                                                            <ul class="splide__list">
+                                                                {% for be in book.bookedition_set.all %}
+                                                                    <li class="splide__slide">
+                                                                        <a target="_blank"
+                                                                           href="{% url 'index:book-edition-detail' be.id %}">
+                                                                            <img class="book-cover-img"
+                                                                                 data-rating="{{ be.rating }}"
+                                                                                 data-rating-sum="{{ be.rating_sum }}"
+                                                                                 data-rating-source="{{ be.get_rating_source_icon_url }}"
+                                                                                 data-splide-lazy="{% get_media_prefix %}{{ be.cover.cover }}"
+                                                                                 src="{% get_media_prefix %}{{ be.cover.cover }}"
+                                                                                 alt="">
+                                                                        </a>
+                                                                        <div>
+                                                                             <span style="display:block; text-align:center;">
+                                                                                {{ be.publisher.name }} {{ be.get_pub_date }}
+                                                                             </span>
+                                                                            {% if not book.bookedition_set.count|length_is:1 %}
+                                                                                <br>
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    </section>
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <img class="rating-source" width="16" height="16"
+                                                     src="{{ book.bookedition_set.first.get_rating_source_icon_url }}" alt="">
+                                                <span class="rating-text" style="vertical-align: middle">{{ book.bookedition_set.first.rating }}</span>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <span class="rating-sum-text">{{ book.bookedition_set.first.rating_sum|intcomma }}</span>
+                                            </td>
+                                            <td>
+                                                <p>{{ book.title_zh }}</p>
+                                                {% if book.title_en != book.title_ori %}
+                                                    <p>{{ book.title_ori }}</p>
+                                                {% endif %}
+                                                {% if book.title_en %}
+                                                    <p>{{ book.title_en }}</p>
+                                                {% endif %}
+                                            </td>
+                                            <td style="text-align: center;">{{ book.author.name }}</td>
+                                            <td style="text-align: center;">{{ book.length.name }}</td>
+                                            <td style="text-align: center;">{{ book.series.name }}</td>
+                                            <td style="text-align: center;">{{ book.get_pub_date }}</td>
+                                            <td class="text-wrap" style="width: 25%">
+                                                {{ book.desc|linebreaks }}
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <a target="_blank" href="{{ book.get_absolute_url }}">
+                                                    <button type="button" class="mb-1 btn btn-sm btn-info">
+                                                        <i class="mdi mdi-playlist-edit"></i> Edit
+                                                    </button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End Content -->
+</div>
+{% endblock %}
+6
+
+{% block javascript %}
+    <script type="text/javascript" src="{% static 'js/jquery.dataTables.js' %}"></script>
+    <script type="text/javascript" src="{% static "js/splide.js" %}"></script>
+    <script>
+        function format(desc, covers) {
+            if (covers === "\"\""){
+                book_cover_html = ""
+            } else {
+                book_cover_html =
+                    '<tr><td class="font-weight-bold" >封面:</td>' +
+                    '<td class="text-wrap">'
+                        for (const prop in covers) {
+                            book_cover_html += '<img alt="" style="height: 300px;margin-top: 5px;margin-left: 5px" title=' + `${prop}` + ' src=' + `${covers[prop]}` + '>'
+                        }
+
+                book_cover_html += '<td ></td></td></tr>'
+            }
+
+            html_str =
+                '<table >' + book_cover_html+'</table>';
+            return html_str
+        }
+        
+        function init_splide() {
+                        var elms = $( '.splide' );
+            Splide.defaults = {
+                type: "loop",
+                width: "12rem",
+                arrows:false,
+                wheel: true,
+                lazyLoad:"nearby",
+            }
+            for ( var i = 0; i < elms.length; i++ ) {
+              let splide_elm = new Splide( elms[ i ] ).mount();
+              splide_elm.on( 'moved', function (destIndex) {
+                let img_tag = $(splide_elm.Components.Slides.getAt(destIndex).slide.querySelector('.book-cover-img'))
+                $(splide_elm.root).parent().next('td').find('span.rating-text').text(img_tag.data('rating'))
+                $(splide_elm.root).parent().next('td').find('img.rating-source').attr("src", img_tag.data('rating-source'))
+                $(splide_elm.root).parent().next('td').next('td').find('span.rating-sum-text').text(img_tag.data('rating-sum'))
+              });
+            }
+        }
+
+        $(document).ready(function () {
+            {# Datatable js init #}
+            var table = $('#expendable-data-table').DataTable( {
+              "className": 'details-control',
+              "order": [[0, 'asc']],
+              "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+              "pageLength": 25,
+                columnDefs: [
+                    {orderable: false, targets: 1},
+                    {orderable: false, targets: 4},
+                    {orderable: false, targets: -1},
+                    {orderable: false, targets: -2}
+                ],
+
+              "autoWidth": false,
+              "dom": '<"row align-items-center justify-content-between top-information"lf>rt<"row align-items-ce' +
+                  'nter justify-content-between bottom-information"ip><"clear">',
+              "drawCallback": function () {
+                init_splide()
+              }
+            });
+        })
+    </script>
+{% endblock %}

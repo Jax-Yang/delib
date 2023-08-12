@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}⬇️ Import Edition{% endblock %}
+
+{% block main_content %}
+    <div class="content-wrapper">
+        <div class="content">
+
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger" role="alert">
+                            <i class="mdi mdi-alert mr-1"> </i> {{ message }}
+                        </div>
+                    {% elif message.tags == 'info' %}
+                        <div class="alert alert-success" role="alert">
+                            <i class="mdi mdi-alert mr-1"> </i> {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card card-default">
+                        <div class="card-header card-header-border-bottom">
+                            <h2>Book Edition Data Import</h2>
+                        </div>
+                        <div class="card-body">
+                            <form class="" action="." method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            {{ form.url.label_tag }}
+                                            <input type="url" required autocomplete="off"
+                                                   class="form-control input-lg mb-2 mr-sm-2"
+                                                   name="{{ form.url.html_name }}" id="id_url">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            {{ form.lang.label_tag }}
+                                            <input type="text" required value="zh"
+                                                   class="form-control mb-2 mr-sm-2"
+                                                   name="{{ form.lang.html_name }}" id="id_lang">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            {{ form.book_id.label_tag }}
+                                            <input type="number" required autocomplete="off"
+                                                   class="form-control mb-2 mr-sm-2"
+                                                   name="{{ form.book_id.html_name }}" id="id_book">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            {{ form.type.label_tag }}
+                                            <select required name="{{ form.type.html_name }}" id="id_type" class="custom-select"
+                                            style="margin-left: 0;width: content-box">
+                                                <option value="db" selected>Normal</option>
+                                                <option value="good_reads">Good Read</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary text-right">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End Content -->
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $('.custom-select').css("width", "").css("margin-left", "")
+    </script>
+{% endblock %}

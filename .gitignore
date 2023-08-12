@@ -1,0 +1,5 @@
+media
+playground.py
+.idea
+*.pyc
+meta/local_settings.py

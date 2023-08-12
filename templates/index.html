@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}🚀 Dashboard{% endblock %}
+
+{% block main_content %}
+    <!-- CONTENT WRAPPER ====== -->
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="row">
+                <div class="col-xl-4 col-lg-6 col-12">
+                    <div class="card widget-block p-4 rounded bg-primary border">
+                        <div class="card-block">
+                            <i class="mdi mdi-book mr-4 text-white"></i>
+                            <h4 class="text-white my-2">{{ books_num }}</h4>
+                            <p>Books</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-12">
+                    <div class="card widget-block p-4 rounded bg-warning border">
+                        <div class="card-block">
+                            <i class="mdi mdi-book-multiple mr-4 text-white"></i>
+                            <h4 class="text-white my-2">{{ editions_num }}</h4>
+                            <p>Book Editions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-lg-6 col-12">
+                    <div class="card widget-block p-4 rounded bg-danger border">
+                        <div class="card-block">
+                            <i class="mdi mdi-account-outline mr-4 text-white"></i>
+                            <h4 class="text-white my-2">{{ authors_num }}</h4>
+                            <p>Authors</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-lg-6 col-12">
+                    <div class="card widget-block p-4 rounded bg-danger border">
+                        <div class="card-block">
+                            <i class="mdi mdi-account-outline mr-4 text-white"></i>
+                            <h4 class="text-white my-2">{{ publishers_num }}</h4>
+                            <p>Publishers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End Content -->
+    </div> <!-- End Content Wrapper -->
+{% endblock %}

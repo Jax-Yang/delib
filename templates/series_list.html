@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}🕵🏻‍♀️ Authors{% endblock %}
+
+{% block css %}
+    <link href="{% static 'plugins/data-tables/datatables.bootstrap4.min.css' %}" rel="stylesheet">
+    <link href="https://unpkg.com/sleek-dashboard/dist/assets/css/sleek.min.css">
+{% endblock %}
+
+{% block main_content %}
+    <!-- ====================================
+    ——— CONTENT WRAPPER
+    ===================================== -->
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-default">
+                        <div class="card-header card-header-border-bottom d-flex justify-content-between">
+                            <h2>Authors List</h2>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="hoverable-data-table">
+                                <table id="hoverable-data-table" class="table table-hover nowrap" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>中文名</th>
+                                            <th>作品数量</th>
+                                            <th>Edit</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for serie in series %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ serie.name }}</td>
+                                            <td>
+                                                <a href="{% url "index:search-book" %}?s={{ serie.name }}"
+                                                   target="_blank">{{ serie.book_set.count }}
+                                                </a>
+                                            </td>
+                                            <td><a target="_blank" href="{{ serie.get_absolute_url }}">
+                                                <button type="button" class="mb-1 btn btn-sm btn-info">
+                                                    <i class="mdi mdi-playlist-edit"></i> Edit
+                                                </button>
+                                            </a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End Content -->
+    </div> <!-- End Content Wrapper -->
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'plugins/data-tables/jquery.datatables.min.js' %}"></script>
+    <script src="{% static 'plugins/data-tables/datatables.bootstrap4.min.js' %}"></script>
+    <script>
+        var hoverableDataTable = $("#hoverable-data-table");
+        if (hoverableDataTable.length !== 0) {
+            hoverableDataTable.DataTable({
+                "aLengthMenu": [
+                    [25, 50, -1],
+                    [25, 50, "All"]
+                ],
+                "pageLength": -1,
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">',
+            });
+        }
+    </script>
+{% endblock %}

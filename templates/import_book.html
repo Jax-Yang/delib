@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}⬇️ Import Book{% endblock %}
+
+{% block main_content %}
+    <div class="content-wrapper">
+        <div class="content">
+
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger" role="alert">
+                            <i class="mdi mdi-alert mr-1"> </i> {{ message }}
+                        </div>
+                    {% elif message.tags == 'info' %}
+                        <div class="alert alert-success" role="alert">
+                            <i class="mdi mdi-alert mr-1"> </i> {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+
+            <div class="card card-default">
+                <div class="card-header card-header-border-bottom">
+                    <h2>Book Data Import</h2>
+                </div>
+                <div class="card-body">
+                    <form class="" action="." method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="kind" value="book">
+                        <div class="form-group">
+                            <label for="id_url">URL:</label>
+                            <input type="url" required autocomplete="off"
+                                   class="form-control input-lg mb-2 mr-sm-2" name="url" id="id_url">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_type">Source:</label>
+                            <select required name="type" id="id_type" class="custom-select mr-sm-2"
+                                    style="margin-left: 0;">
+                                <option value="db" selected>Normal</option>
+                                <option value="good_reads">Good Read</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="card card-default">
+                <div class="card-header card-header-border-bottom">
+                    <h2>Author Data Import</h2>
+                </div>
+                <div class="card-body">
+                    <form class="" action="." method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="kind" value="author">
+                        <div class="form-group">
+                            <label for="id_url">URL:</label>
+                            <input type="url" required autocomplete="off"
+                                   class="form-control mb-2 mr-sm-2" name="url" id="id_url">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_type">Source:</label>
+                            <select required name="type" id="id_type" class="custom-select mr-sm-2"
+                                    style="margin-left: 0;" >
+                                <option value="db" selected>Normal</option>
+                                <option value="good_reads">Good Read</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div> <!-- End Content -->
+    </div>
+{% endblock %}
