@@ -3,3 +3,4 @@ playground.py
 .idea
 *.pyc
 meta/local_settings.py
+common/utils.py

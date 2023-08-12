@@ -92,7 +92,7 @@ class BookEdition(models.Model):
     )
     rating_source_def_dict = dict(rating_source_def)
     icon_mapping = {
-        'db': static('img/rating-source-icon/gr.ico'),
+        'db': static('img/rating-source-icon/nr.png'),
         'gr': static('img/rating-source-icon/gr.ico'),
         'am': static('img/rating-source-icon/am.ico'),
     }
